@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot2x.demo.mapper.UserMapper">
+
+    <resultMap id="user" type="User">
+        <result column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="SEX" jdbcType="VARCHAR" property="sex"/>
+        <result column="BIRTHDAY" jdbcType="TIMESTAMP" property="birthday"/>
+        <result column="DESC" jdbcType="VARCHAR" property="desc"/>
+        <result column="CREATETIME" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <insert id="add" parameterType="User" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into `user`(`name`, `sex`, `birthday`, `desc`)
+        values (#{name}, #{sex}, #{birthday}, #{desc})
+    </insert>
+
+    <select id="findById" parameterType="int" resultType="User">
+        select `id`, `name`, `sex`, `birthday`, `desc`, `createTime`
+        from `user` where `id` = #{id}
+    </select>
+
+    <select id="findAll" resultMap="user">
+        select `ID`, `NAME`, `SEX`, `BIRTHDAY`, `DESC`, `CREATETIME`
+        from `user`
+    </select>
+
+    <select id="findByIds" parameterType="collection" resultType="User">
+        select `id`, `name`, `sex`, `birthday`, `desc`, `createTime`
+        from `user` where `id` in
+        <foreach collection="ids" open="(" close=")" item="id" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="findByArgs" resultType="User">
+        select `id`, `name`, `sex`, `birthday`, `desc`, `createTime`
+        from `user` where `id` = 0
+        <foreach collection="args" item="item" index="index">
+            union all  select `id`, `name`, `sex`, `birthday`, `desc`, `createTime`
+            from `user` where `id` = #{item.id} and `name` = #{item.name}
+        </foreach>
+    </select>
+
+
+    <insert id="add1" parameterType="User" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into `user`(`name`, `sex`, `birthday`, `desc`, `d1`, `d2`, `d3`, `d5`, `d6`, `d7`)
+        values (#{name}, #{sex}, #{birthday}, #{desc}, #{d1}, #{d2}, #{d3}, #{d5}, #{d6}, #{d7})
+    </insert>
+
+   <!-- <insert id="add1" parameterType="User" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into `user`(`name`, `sex`, `birthday`, `desc`, `d1`, `d2`, `d3`, `d4`, `d5`, `d6`, `d7`)
+        values (#{name}, #{sex}, #{birthday}, #{desc}, #{d1}, #{d2}, #{d3}, #{d4, jdbcType=BLOB}, #{d5}, #{d6}, #{d7})
+    </insert>-->
+
+</mapper>

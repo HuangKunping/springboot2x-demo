@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <plugins>
+        <plugin interceptor="com.springboot2x.demo.interceptor.MybatisSQLInterceptor">
+            <property name="dataSourceResolver" value="
+            com.springboot2x.demo.interceptor.resolver.HikariDataSourceResolver
+            ,com.springboot2x.demo.interceptor.resolver.TomcatDataSourceResolver"/>
+        </plugin>
+    </plugins>
+</configuration>
